@@ -4,3 +4,4 @@
 *.jar
 *.war
 *.ear
+/FRC3699/build/
