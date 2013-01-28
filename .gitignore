@@ -5,3 +5,4 @@
 *.war
 *.ear
 /FRC3699/build/
+/FRC3699/nbproject/private/
