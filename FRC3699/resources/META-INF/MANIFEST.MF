@@ -1,6 +1,0 @@
-MIDlet-Name: FRC3699
-MIDlet-Version: 1.0.0
-MIDlet-Vendor: FIRST
-MIDlet-1: Team3699Robot, , org.robot3699.Team3699Robot
-MicroEdition-Profile: IMP-1.0
-MicroEdition-Configuration: CLDC-1.1
