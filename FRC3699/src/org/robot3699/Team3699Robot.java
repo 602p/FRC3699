@@ -14,7 +14,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.networktables.NetworkTableKeyNotDefined;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.io.IOException;
 
 
 
@@ -24,53 +27,44 @@ public class Team3699Robot extends SimpleRobot {
     Joystick joystick_right = new Joystick(Constants.joystick_right_USB);
     DriverStationLCD userMessages = DriverStationLCD.getInstance();
     DriverStation driverstation = DriverStation.getInstance();
+    NetworkTable server;
     
     int dev_=0;
     
     public void robotInit(){
-        SmartDashboard.init();
+        NetworkTable.setServerMode();
+        NetworkTable.setIPAddress("10.36.99.2");
+        try {
+            NetworkTable.initialize();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        this.server = NetworkTable.getTable("SmartDashboard");
     }
     
     public void operatorControl() {
-        this.userMessages.println(DriverStationLCD.Line.kUser2, 1, "FRC Robotics Team              ");
-        this.userMessages.println(DriverStationLCD.Line.kUser3, 1, "3699 Robot Teleop              ");
-        this.userMessages.println(DriverStationLCD.Line.kUser4, 1, Constants.version);
-        this.userMessages.updateLCD();
+        showUserMessages("TeleOp");
+        
         while (isOperatorControl()&&isEnabled()){
             if (! (joystick_left.getRawButton(Constants.robotdrive_break_button)||joystick_right.getRawButton(Constants.robotdrive_break_button))){
-                robotdrive.arcadeDrive(doRobotdriveScaling(joystick_left.getY())
-                        , doRobotdriveScaling(joystick_left.getX()));//robotdrive.tankDrive(joystick_left.getY()*Constants.robotdrive_scale_left, joystick_right.getY()*Constants.robotdrive_scale_right);
+                robotdrive.tankDrive(doRobotdriveScaling(joystick_left.getY()), 
+                        doRobotdriveScaling(joystick_right.getY()));
+                //robotdrive.arcadeDrive(doRobotdriveScaling(joystick_left.getY())
+                //        , doRobotdriveScaling(joystick_left.getX()));
             }
             
-            if (joystick_left.getRawButton(2) && dev_<100){
-                dev_++;
-                
-            }else if (joystick_left.getRawButton(3) && dev_>0){
-                dev_--;
-                
-            }
-            
-            SmartDashboard.putDouble("X", joystick_left.getX());
-            SmartDashboard.putDouble("Y", joystick_left.getY());
-            SmartDashboard.putDouble("Battery Voltage", DriverStation.getInstance().getBatteryVoltage());
-            SmartDashboard.putInt("dev_", dev_);
+            updateSmartDashboard();
             
             Timer.delay(0.005); //and make sure we dont overload the cRIO
         }  
     }
     
     public void disabled(){
-        this.userMessages.println(DriverStationLCD.Line.kUser2, 1, "FRC Robotics Team              ");
-        this.userMessages.println(DriverStationLCD.Line.kUser3, 1, "3699 Robot Disabled            ");
-        this.userMessages.println(DriverStationLCD.Line.kUser4, 1, Constants.version);
-        this.userMessages.updateLCD();
+        showUserMessages("Disabled");
     }
     
     public void autonomous(){
-        this.userMessages.println(DriverStationLCD.Line.kUser2, 1, "FRC Robotics Team              ");
-        this.userMessages.println(DriverStationLCD.Line.kUser3, 1, "3699 Robot Autonomous          ");
-        this.userMessages.println(DriverStationLCD.Line.kUser4, 1, Constants.version);
-        this.userMessages.updateLCD();
+        showUserMessages("Autonomous");
     }
     
     public double doRobotdriveScaling(double value){
@@ -94,5 +88,36 @@ public class Team3699Robot extends SimpleRobot {
         driverstation.setDigitalOut(1, false);
         driverstation.setDigitalOut(2, false);
         return value*Constants.robotdrive_scale_hi;
+    }
+    
+    public void showUserMessages(String status){
+        this.userMessages.println(DriverStationLCD.Line.kUser2, 1, "FRC Robotics Team              ");
+        this.userMessages.println(DriverStationLCD.Line.kUser3, 1, "3699 Robot "+status+"              ");
+        this.userMessages.println(DriverStationLCD.Line.kUser4, 1, Constants.version);
+        this.userMessages.updateLCD();
+    }
+    
+    public void updateSmartDashboard(){
+        if (joystick_left.getRawButton(2) && dev_<100){
+                dev_++;
+                
+            }else if (joystick_left.getRawButton(3) && dev_>0){
+                dev_--;
+                
+            }
+            
+            SmartDashboard.putDouble("X", joystick_left.getX());
+            SmartDashboard.putDouble("Y", joystick_left.getY());
+            SmartDashboard.putDouble("Battery Voltage", DriverStation.getInstance().getBatteryVoltage());
+            SmartDashboard.putInt("dev_", dev_);
+            
+            {
+            try {
+                SmartDashboard.putInt("Distance To Target", Integer.parseInt(this.server.getString("Distance")));
+                //SmartDashboard.putString("NetworkTable Keys", this.server.);
+            } catch (NetworkTableKeyNotDefined ex) {
+                ex.printStackTrace();
+            }
+            }
     }
 }
