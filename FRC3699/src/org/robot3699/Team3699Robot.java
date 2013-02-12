@@ -10,6 +10,7 @@ package org.robot3699;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStationLCD;
+import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SimpleRobot;
@@ -27,19 +28,20 @@ public class Team3699Robot extends SimpleRobot {
     Joystick joystick_right = new Joystick(Constants.joystick_right_USB);
     DriverStationLCD userMessages = DriverStationLCD.getInstance();
     DriverStation driverstation = DriverStation.getInstance();
-    NetworkTable server;
+    Jaguar test_CIM_1 = new Jaguar(3);
+    Jaguar test_CIM_2 = new Jaguar(4);
     
     int dev_=0;
     
     public void robotInit(){
-        NetworkTable.setServerMode();
+        /*NetworkTable.setServerMode();
         NetworkTable.setIPAddress("10.36.99.2");
         try {
             NetworkTable.initialize();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        this.server = NetworkTable.getTable("SmartDashboard");
+        this.server = NetworkTable.getTable("SmartDashboard");*/
     }
     
     public void operatorControl() {
@@ -52,6 +54,9 @@ public class Team3699Robot extends SimpleRobot {
                 //robotdrive.arcadeDrive(doRobotdriveScaling(joystick_left.getY())
                 //        , doRobotdriveScaling(joystick_left.getX()));
             }
+            
+            this.test_CIM_1.set(driverstation.getAnalogIn(2));
+            this.test_CIM_2.set(driverstation.getAnalogIn(3));
             
             updateSmartDashboard();
             
@@ -111,6 +116,7 @@ public class Team3699Robot extends SimpleRobot {
             SmartDashboard.putDouble("Battery Voltage", DriverStation.getInstance().getBatteryVoltage());
             SmartDashboard.putInt("dev_", dev_);
             
+            /*
             {
             try {
                 SmartDashboard.putInt("Distance To Target", Integer.parseInt(this.server.getString("Distance")));
@@ -119,5 +125,6 @@ public class Team3699Robot extends SimpleRobot {
                 ex.printStackTrace();
             }
             }
+            * */
     }
 }
