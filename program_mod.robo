@@ -1,0 +1,262 @@
+<head><version>2.49.3</version></head>
+<Axis_Internet_Camera>
+  <auto_exposure>FALSE</auto_exposure>
+  <auto_back_light>TRUE</auto_back_light>
+  <color_level_value>75</color_level_value>
+  <exposure_value>24</exposure_value>
+  <auto_white_balance>TRUE</auto_white_balance>
+  <sharpness_value>50</sharpness_value>
+  <ip_address>10.36.99.11</ip_address>
+  <password>FRC</password>
+  <username>FRC</username>
+  <port>80</port>
+  <contrast_value>60</contrast_value>
+  <is_active>TRUE</is_active>
+  <brightness_value>45</brightness_value>
+</Axis_Internet_Camera>
+<RGB_Filter disabled>
+  <channel>119</channel>
+  <hysteresis>0</hysteresis>
+  <result_type>3</result_type>
+  <min_value>58</min_value>
+  <hue_value>50</hue_value>
+</RGB_Filter>
+<Intensity>
+  <noise_threshold>20</noise_threshold>
+  <amount>-67</amount>
+</Intensity>
+<Adaptive_Threshold>
+  <mean_offset>-10</mean_offset>
+  <filter_size>25</filter_size>
+  <min_threshold>61</min_threshold>
+  <channel_type>2</channel_type>
+  <max_threshold>158</max_threshold>
+</Adaptive_Threshold>
+<Blob_Filter>
+  <filters>
+    <tab:5/>
+    <tab:2/>
+    <tab:4/>
+    <tab>
+      <filter:2>
+        <create_array>0</create_array>
+        <ratio>2.85000</ratio>
+        <count_threshold>0</count_threshold>
+        <weight_threshold>0.71</weight_threshold>
+        <invert_count>0</invert_count>
+        <filter_id>63</filter_id>
+        <invert_threshold>0</invert_threshold>
+      </filter:2>
+      <filter:4>
+        <create_array>0</create_array>
+        <count_threshold>0</count_threshold>
+        <weight_threshold>0.28</weight_threshold>
+        <invert_count>0</invert_count>
+        <filter_id>14</filter_id>
+        <invert_threshold>0</invert_threshold>
+      </filter:4>
+      <filter:3>
+        <create_array>0</create_array>
+        <count_threshold>0</count_threshold>
+        <weight_threshold>0.2</weight_threshold>
+        <invert_count>0</invert_count>
+        <image>Source</image>
+        <filter_id>77</filter_id>
+        <invert_threshold>0</invert_threshold>
+      </filter:3>
+      <filter:5>
+        <create_array>0</create_array>
+        <count_threshold>0</count_threshold>
+        <weight_threshold>0.7</weight_threshold>
+        <invert_count>0</invert_count>
+        <filter_id>14</filter_id>
+        <invert_threshold>1</invert_threshold>
+      </filter:5>
+      <filter>
+        <create_array>0</create_array>
+        <count_threshold>0</count_threshold>
+        <weight_threshold>0</weight_threshold>
+        <invert_count>0</invert_count>
+        <filter_id>8</filter_id>
+        <invert_threshold>0</invert_threshold>
+        <minimum_size>5206</minimum_size>
+      </filter>
+    </tab>
+    <tab:6/>
+    <tab:3/>
+  </filters>
+  <sort_array_on_y>FALSE</sort_array_on_y>
+  <largest_is_background>FALSE</largest_is_background>
+  <sort_array_on_x>FALSE</sort_array_on_x>
+  <show_weights>FALSE</show_weights>
+  <create_blob_array_variable>FALSE</create_blob_array_variable>
+</Blob_Filter>
+<Close>
+  <restrict_dilation>FALSE</restrict_dilation>
+  <erode_count>3</erode_count>
+  <dilate_count>3</dilate_count>
+  <close_borders>FALSE</close_borders>
+  <symmetrical>TRUE</symmetrical>
+</Close>
+<Fill>
+  <four_pixel_connectivity>FALSE</four_pixel_connectivity>
+  <size>13</size>
+  <check_border>FALSE</check_border>
+  <fill_with_average_color>FALSE</fill_with_average_color>
+</Fill>
+<Blob_Replace>
+  <thickness>1</thickness>
+  <color_index>3</color_index>
+  <fill_shape>TRUE</fill_shape>
+  <order_array_on_x>FALSE</order_array_on_x>
+  <shape_index>15</shape_index>
+  <order_array_on_y>FALSE</order_array_on_y>
+</Blob_Replace>
+<VBScript_Program>
+  <tab_size_index>1</tab_size_index>
+  <script>list = GetArrayVariable("BFR_COORDINATES")
+SetVariable "locked", false
+if isArray(list) then
+  if ubound(list) &gt; 0 then
+
+		targetPixelHeight = 0
+    targetSamples = 0
+
+    ' calibrated for an Axis camera
+		imageWidth = GetVariable("IMAGE_WIDTH")
+  	cameraFieldOfView = 42.5 '42.5
+	  targetHeight = 18 '18
+    ' grab list of coordinates from blob_replace
+	 	' note the array is sorted by previous module in a specific order
+    rightx =  list(0)
+		righty = list(1)
+		rightxx = list(6)
+    rightyy = list(7)
+		leftx = list(2)
+    lefty = list(3)
+		leftxx = list(4)
+    leftyy = list(5)
+
+		SetVariable "rightx", rightx
+		SetVariable "righty", righty
+		SetVariable "rightxx", rightxx
+		SetVariable "rightyy", rightyy
+		SetVariable "leftx", leftx
+		SetVariable "lefty", lefty
+		SetVariable "leftxx",leftxx
+		SetVariable "leftyy", leftyy
+		SetVariable "locked", true
+
+		' based on these two side lines get the center line height
+		' the center line is used since we want to aim to the center
+  	' of the target. This also removes any perspective distortion
+	  ' where the right or left size may be a couple inches closer
+		' or futher away from the camera
+  	targetPixelHeight = ((lefty - leftyy) + (righty - rightyy)) / 2
+		targetPixelWidth = ((rightx - leftx) + (rightxx - leftxx)) / 2
+
+write targetPixelHeight 
+
+    ' we can use a known distance to determine FOV if we don't know it
+	  ' measuredDistance = 10.0*12.0
+ 	  ' write "Calculated FOV " &amp; (((atan((((targetHeight*imageHeight)/targetPixelHeight)/2)/measuredDistance)*2.0)*180.0)/3.14159) &amp; vbCRLF
+
+    ' determine distance in inches
+    totalDistance = (((targetHeight*imageHeight)/targetPixelHeight)/2)/tan(((cameraFieldOfView*3.14159)/180.0)/2.0)
+	
+		SetVariable "Distance", CInt((totalDistance*100)/12)/100
+
+		SetVariable "TargetHeight", CInt((targetPixelHeight*100)/100)
+		SetVariable "TargetWidth", CInt((targetPixelWidth*100)/100)
+		bfrCoordinates = GetArrayVariable("BFR_COORDINATES")
+bfrCoordinates = GetArrayVariable("BFR_COORDINATES")
+
+
+
+
+	end if
+end if
+
+SetVariable "Test", CInt(10)
+</script>
+  <source_mode>gui</source_mode>
+</VBScript_Program>
+<Math>
+  <image2>Current</image2>
+  <function>5</function>
+  <divisor>1</divisor>
+  <image1>Source</image1>
+  <all_channels>TRUE</all_channels>
+  <bias>0</bias>
+</Math>
+<Display_Variables>
+  <northwest>Distance
+IMAGE_HEIGHT
+IMAGE_WIDTH
+POWER_LIFE_PERCENT
+</northwest>
+  <display_as_annotation>FALSE</display_as_annotation>
+  <dim_background>TRUE</dim_background>
+  <northeast>FPS
+lefty
+leftyy
+righty
+rightyy
+</northeast>
+  <southwest>TargetHeight
+TargetWidth
+</southwest>
+  <display_value_only>FALSE</display_value_only>
+  <north>leftx
+leftxx
+rightx
+rightxx
+</north>
+  <font_color>orange</font_color>
+  <border_color_index>5</border_color_index>
+  <border_color>red</border_color>
+  <font_size>Normal (10pt)</font_size>
+  <west>BFR_COORDINATES
+locked
+</west>
+  <font_size_index>2</font_size_index>
+</Display_Variables>
+<NetworkTables>
+  <port>1735</port>
+  <variable_type_index>0</variable_type_index>
+  <variables_to_send>BFR_COORDINATES
+CAMERA_NAME
+CAMERA_PATH
+Distance
+FPS
+IMAGE_COUNT
+IMAGE_DATETIME
+IMAGE_FILENAME
+IMAGE_HEIGHT
+IMAGE_LABEL
+IMAGE_PATH
+IMAGE_PROCESSED
+IMAGE_TIME
+IMAGE_WIDTH
+LOADED_IMAGE_SCALE
+locked
+MOUSE_CLICK_B
+MOUSE_CLICK_G
+MOUSE_CLICK_R
+MOUSE_CLICK_TIME
+MOUSE_CLICK_X
+MOUSE_CLICK_Y
+MOUSE_X
+MOUSE_Y
+POWER_CHARGE
+POWER_DEVICE
+POWER_LIFE_PERCENT
+POWER_LIFE_TIME
+PROCESS_TIME
+SCRIPT_COUNT
+Test
+WIRELESS_STRENGTH</variables_to_send>
+  <prefix>/SmartDashboard/</prefix>
+  <filter_type_index>0</filter_type_index>
+  <hostname>10.36.99.2</hostname>
+</NetworkTables>

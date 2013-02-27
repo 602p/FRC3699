@@ -8,6 +8,7 @@
 package org.robot3699;
 
 
+//import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Jaguar;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.networktables.NetworkTableKeyNotDefined;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,43 +24,83 @@ import java.io.IOException;
 
 
 
+
 public class Team3699Robot extends SimpleRobot {
-    RobotDrive robotdrive = new RobotDrive(Constants.robotdrive_left_PWM,Constants.robotdrive_right_PWM);
-    Joystick joystick_left = new Joystick(Constants.joystick_left_USB);
-    Joystick joystick_right = new Joystick(Constants.joystick_right_USB);
-    DriverStationLCD userMessages = DriverStationLCD.getInstance();
-    DriverStation driverstation = DriverStation.getInstance();
-    Jaguar test_CIM_1 = new Jaguar(3);
-    Jaguar test_CIM_2 = new Jaguar(4);
+    
+    public Joystick joystick_left = new Joystick(Constants.joystick_left_USB);
+    public Joystick joystick_right = new Joystick(Constants.joystick_right_USB);
+    public Joystick joystick_elevator = new Joystick(3);
+    public DriverStationLCD userMessages = DriverStationLCD.getInstance();
+    public DriverStation driverstation = DriverStation.getInstance();
+    public NetworkTable server;
+    
+    //public Jaguar test_CIM_1 = new Jaguar(7);
+    //public Jaguar test_CIM_2 = new Jaguar(8);
+    
+    public int Disc_Counter = 0;
+    /*
+    public DigitalInput Disc_Check = new DigitalInput(Constants.Disc_Check_Channel);
+    public DigitalInput Disc_Top_Check = new DigitalInput(Constants.Disc_Top_Check_Channel);
+    public DigitalInput Upside_Down_Check = new DigitalInput(Constants.Upside_Down_Check_Channel);
+    */
+    
+    public RobotDrive robotdrive = new RobotDrive(Constants.robotdrive_left_PWM,Constants.robotdrive_right_PWM);
+    public Jaguar Intake_motor =  new Jaguar(Constants.intake_PWM);
+    public Jaguar Elevator_motor = new Jaguar(Constants.elevator_PWM);
+    public Jaguar Elevator_intake = new Jaguar(Constants.elevator_intake_PWM);
+    public Jaguar Elevator_outtake = new Jaguar(Constants.elevator_outtake_PWM);
+    
+    public boolean Intake = false;
+    public boolean toggle = false;
     
     int dev_=0;
     
     public void robotInit(){
-        /*NetworkTable.setServerMode();
         NetworkTable.setIPAddress("10.36.99.2");
         try {
             NetworkTable.initialize();
+            NetworkTable.setServerMode();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        this.server = NetworkTable.getTable("SmartDashboard");*/
+        this.server = NetworkTable.getTable("SmartDashboard");
+        
+        /*LiveWindow.addActuator("Elevator", "Elevator Intake", Elevator_intake);
+        LiveWindow.addActuator("Elevator", "Elevator Gearbox", Elevator_motor);
+        LiveWindow.addActuator("Elevator", "Elevator Outtake", Elevator_outtake);
+        LiveWindow.addActuator("Intake", "Intake", Elevator_motor);*/
+        robotdrive.setSafetyEnabled(false);
+        
     }
     
     public void operatorControl() {
         showUserMessages("TeleOp");
         
         while (isOperatorControl()&&isEnabled()){
-            if (! (joystick_left.getRawButton(Constants.robotdrive_break_button)||joystick_right.getRawButton(Constants.robotdrive_break_button))){
+            if (! Util.checkButton(this, Constants.robotdrive_break_button)){
                 robotdrive.tankDrive(doRobotdriveScaling(joystick_left.getY()), 
                         doRobotdriveScaling(joystick_right.getY()));
                 //robotdrive.arcadeDrive(doRobotdriveScaling(joystick_left.getY())
                 //        , doRobotdriveScaling(joystick_left.getX()));
             }
             
-            this.test_CIM_1.set(driverstation.getAnalogIn(2));
-            this.test_CIM_2.set(driverstation.getAnalogIn(3));
+            /*if (driverstation.getDigitalIn(3)){
+                this.test_CIM_1.set(driverstation.getAnalogIn(2));
+            }else{
+                this.test_CIM_1.set(0-driverstation.getAnalogIn(2));
+            }
+            
+            if (driverstation.getDigitalIn(4)){
+                this.test_CIM_2.set(driverstation.getAnalogIn(3));
+            }else{
+                this.test_CIM_2.set(0-driverstation.getAnalogIn(3));
+            }*/
+            
             
             updateSmartDashboard();
+            
+            IntakeControl.teleopProcess(this);
+            ElevatorControl.teleopProcess(this);
             
             Timer.delay(0.005); //and make sure we dont overload the cRIO
         }  
@@ -74,12 +116,12 @@ public class Team3699Robot extends SimpleRobot {
     
     public double doRobotdriveScaling(double value){
         if (driverstation.getDigitalIn(Constants.driverstation_scale_toggle_channel)){
-            if (driverstation.getDigitalIn(2)){
+            if (driverstation.getDigitalIn(Constants.driverstation_scale_toggle_channel2)){
                 driverstation.setDigitalOut(2, true);
                 driverstation.setDigitalOut(1, false);
                 driverstation.setDigitalOut(3, false);
-                if (driverstation.getAnalogIn(1)<1){
-                    return value*driverstation.getAnalogIn(1);
+                if (driverstation.getAnalogIn(Constants.driverstation_scale_channel)<1){
+                    return value*driverstation.getAnalogIn(Constants.driverstation_scale_channel);
                 }
                 driverstation.setDigitalOut(3, true);
                 return 0;
@@ -87,10 +129,10 @@ public class Team3699Robot extends SimpleRobot {
             driverstation.setDigitalOut(3, false);
             driverstation.setDigitalOut(1, true);
             driverstation.setDigitalOut(2, false);
-            return value*driverstation.getAnalogIn(1)*0.2;
+            return value*driverstation.getAnalogIn(Constants.driverstation_scale_channel)*0.2;
         }
         driverstation.setDigitalOut(3, false);
-        driverstation.setDigitalOut(1, false);
+        driverstation.setDigitalOut(1, false); 
         driverstation.setDigitalOut(2, false);
         return value*Constants.robotdrive_scale_hi;
     }
@@ -99,6 +141,8 @@ public class Team3699Robot extends SimpleRobot {
         this.userMessages.println(DriverStationLCD.Line.kUser2, 1, "FRC Robotics Team              ");
         this.userMessages.println(DriverStationLCD.Line.kUser3, 1, "3699 Robot "+status+"              ");
         this.userMessages.println(DriverStationLCD.Line.kUser4, 1, Constants.version);
+        this.userMessages.println(DriverStationLCD.Line.kUser5, 1, "===VENDETTA LIST:===");
+        this.userMessages.println(DriverStationLCD.Line.kUser6, 1, "(Names Forthcoming) ");
         this.userMessages.updateLCD();
     }
     
@@ -116,7 +160,7 @@ public class Team3699Robot extends SimpleRobot {
             SmartDashboard.putDouble("Battery Voltage", DriverStation.getInstance().getBatteryVoltage());
             SmartDashboard.putInt("dev_", dev_);
             
-            /*
+            
             {
             try {
                 SmartDashboard.putInt("Distance To Target", Integer.parseInt(this.server.getString("Distance")));
@@ -125,6 +169,5 @@ public class Team3699Robot extends SimpleRobot {
                 ex.printStackTrace();
             }
             }
-            * */
     }
 }
