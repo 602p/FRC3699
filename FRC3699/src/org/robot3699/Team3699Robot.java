@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.networktables.NetworkTableKeyNotDefined;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -56,12 +55,17 @@ public class Team3699Robot extends SimpleRobot {
     int dev_=0;
     
     public void robotInit(){
-        NetworkTable.setIPAddress("10.36.99.2");
         try {
+        NetworkTable.setIPAddress("10.36.99.2");
+        
             NetworkTable.initialize();
             NetworkTable.setServerMode();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
+        } catch (IllegalStateException ex){
+            
+        } catch (Exception be){
+            
         }
         this.server = NetworkTable.getTable("SmartDashboard");
         
@@ -70,6 +74,8 @@ public class Team3699Robot extends SimpleRobot {
         LiveWindow.addActuator("Elevator", "Elevator Outtake", Elevator_outtake);
         LiveWindow.addActuator("Intake", "Intake", Elevator_motor);*/
         robotdrive.setSafetyEnabled(false);
+        
+   
         
     }
     
@@ -166,7 +172,9 @@ public class Team3699Robot extends SimpleRobot {
                 SmartDashboard.putInt("Distance To Target", Integer.parseInt(this.server.getString("Distance")));
                 //SmartDashboard.putString("NetworkTable Keys", this.server.);
             } catch (NetworkTableKeyNotDefined ex) {
-                ex.printStackTrace();
+                //ex.printStackTrace();
+            } catch (Exception be){
+                
             }
             }
     }
