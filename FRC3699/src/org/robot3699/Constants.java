@@ -17,6 +17,8 @@ public final class Constants {
     public static double Intake_speed = 0.5;
     public static double Elevator_speed = 0.5;
     
+    public static int shooterToggleButton = 4;
+    
     public static int robotdrive_break_button = 1;
     
     /*
