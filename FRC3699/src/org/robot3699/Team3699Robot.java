@@ -17,10 +17,8 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.networktables.NetworkTableKeyNotDefined;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import java.io.IOException;
-
+//import edu.wpi.first.wpilibj
 
 
 
@@ -54,25 +52,52 @@ public class Team3699Robot extends SimpleRobot {
     
     int dev_=0;
     
+    public boolean[] errors = new boolean[10];
+    
+    //^ Yeah, yeah. Way overinitizized
+    //ERRNO 0: Init error
+    //ERRNO 1: SmartDashboard error
+    //ERRNO 2: Teleop error
+    
+    public boolean allowUnlimitedErrors = false;
+    
+    //Set to true to allow unlimeted errors
+    
+    public void error(String message, int errno){
+        if (!(this.errors[errno]) || this.allowUnlimitedErrors){
+            log(message);
+            errors[errno]=true;
+        }
+    }
+    
+    public void resetError(int errno){
+        errors[errno]=false;
+    }
+    
+    public void log(String message){
+        System.out.println(message);
+    }
+    
     public void robotInit(){
+        log("RobotInit called. Initializing NetworkTabes...");
         try {
         NetworkTable.setIPAddress("10.36.99.2");
         
             NetworkTable.initialize();
             NetworkTable.setServerMode();
-        } catch (IOException ex) {
-            //ex.printStackTrace();
-        } catch (IllegalStateException ex){
-            
-        } catch (Exception be){
-            
+        }catch (Exception be){
+            error("Error in robotInit: \n "+be.getMessage(), 0);
+            error("Reocourrence Test! You shouldnt see this!", 0);
         }
+        log("Init SmartDashboard...");
         this.server = NetworkTable.getTable("SmartDashboard");
         
         /*LiveWindow.addActuator("Elevator", "Elevator Intake", Elevator_intake);
         LiveWindow.addActuator("Elevator", "Elevator Gearbox", Elevator_motor);
         LiveWindow.addActuator("Elevator", "Elevator Outtake", Elevator_outtake);
         LiveWindow.addActuator("Intake", "Intake", Elevator_motor);*/
+        
+        log("Disabling RobotDrive Saftey... :D");
         robotdrive.setSafetyEnabled(false);
         
    
@@ -80,6 +105,9 @@ public class Team3699Robot extends SimpleRobot {
     }
     
     public void operatorControl() {
+        log("Teleop Called Once!");
+        resetError(1);
+        resetError(2);
         try{
         showUserMessages("TeleOp");
         
@@ -106,21 +134,20 @@ public class Team3699Robot extends SimpleRobot {
             
             updateSmartDashboard();
             
-            IntakeControl.teleopProcess(this);
-            ElevatorControl.teleopProcess(this);
-            
             Timer.delay(0.005); //and make sure we dont overload the cRIO
         }  
         }catch (Exception be){
-            be.printStackTrace();
+            error("ERROR IN TELEOP! STACKTRACE: \n "+be.getMessage(), 2);
         }
     }
     
     public void disabled(){
+        log("Disabled.");
         showUserMessages("Disabled");
     }
     
     public void autonomous(){
+        log("Autonomus! (XD I am bad at spelling)");
         showUserMessages("Autonomous");
     }
     
@@ -175,10 +202,8 @@ public class Team3699Robot extends SimpleRobot {
             try {
                 SmartDashboard.putInt("Distance To Target", Integer.parseInt(this.server.getString("Distance")));
                 //SmartDashboard.putString("NetworkTable Keys", this.server.);
-            } catch (NetworkTableKeyNotDefined ex) {
-                //ex.printStackTrace();
             } catch (Exception be){
-                
+                error("ERROR UPDATING SmartDashboard STACK TRACE: "+be.getMessage(), 1);
             }
             }
     }
