@@ -9,10 +9,10 @@ package org.robot3699;
  * @author Louis
  */
 public class ShooterControl {
-    public int[] shooterSpeedLevels = new int[5];
+    public double[] shooterSpeedLevels = new double[5];
     public double shooterSpeedMultiplier = 1.0d;
     public int shooterSpeedState = 0;
-    public boolean toggleButtonState = false;
+    public boolean  toggleButtonState = false;
     
     {
         this.shooterSpeedLevels[0]=0;

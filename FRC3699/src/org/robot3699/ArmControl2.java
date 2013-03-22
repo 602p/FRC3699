@@ -34,12 +34,14 @@ public class ArmControl2 {
     public void update(){
         if (this.state==0 && Util.checkButton(this.robo, Constants.armToggleButton)){
             this.state = 1;
+        }else if (this.state==3 && Util.checkButton(this.robo, Constants.armToggleButton)){
+            this.state = 2;
         }else if (this.state==1 && Util.checkButton(this.robo, Constants.armToggleButton)){
             this.state = 2;
         }else if (this.state==2 && Util.checkButton(this.robo, Constants.armToggleButton)){
             this.state = 1;
         }else if (this.state==1 && topLimit.get()){
-            this.state = 0;
+            this.state = 3;
         }else if (this.state==2 && bottomLimit.get()){
             this.state = 0;
         }
