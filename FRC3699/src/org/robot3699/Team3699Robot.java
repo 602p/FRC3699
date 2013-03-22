@@ -31,6 +31,12 @@ public class Team3699Robot extends SimpleRobot {
     public DriverStation driverstation = DriverStation.getInstance();
     public NetworkTable server;
     
+    public ShooterControl shooter = new ShooterControl();
+    public Jaguar shooterMotor = new Jaguar(Constants.shooterPWMChannel);
+    
+    public ArmControl2 arm = new ArmControl2(this);
+    public Jaguar armMotor = new Jaguar(Constants.armMotorPWM);
+    
     //public Jaguar test_CIM_1 = new Jaguar(7);
     //public Jaguar test_CIM_2 = new Jaguar(8);
     
@@ -133,6 +139,13 @@ public class Team3699Robot extends SimpleRobot {
             
             
             updateSmartDashboard();
+            
+            this.shooter.updateStates(this);
+            this.shooterMotor.set(this.shooter.calculateShooterSpeed());
+            
+            this.arm.update();
+            this.armMotor.set(this.arm.getArmSpeed());
+            
             
             Timer.delay(0.005); //and make sure we dont overload the cRIO
         }  

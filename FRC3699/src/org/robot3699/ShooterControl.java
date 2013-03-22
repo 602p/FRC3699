@@ -10,7 +10,7 @@ package org.robot3699;
  */
 public class ShooterControl {
     public int[] shooterSpeedLevels = new int[5];
-    public float shooterSpeedMultiplier = 1.0f;
+    public double shooterSpeedMultiplier = 1.0d;
     public int shooterSpeedState = 0;
     public boolean toggleButtonState = false;
     
@@ -23,7 +23,7 @@ public class ShooterControl {
         this.shooterSpeedLevels[5]=5;
     }
     
-    public float calculateShooterSpeed(){
+    public double calculateShooterSpeed(){
         return this.shooterSpeedLevels[this.shooterSpeedState]*this.shooterSpeedMultiplier;
     }
     
@@ -37,5 +37,7 @@ public class ShooterControl {
         }else if (!robo.joystick_left.getRawButton(Constants.shooterToggleButton) && this.toggleButtonState){
             this.toggleButtonState=false;
         }
+        
+        this.shooterSpeedMultiplier=robo.driverstation.getAnalogIn(Constants.shooterMultChannel);
     }
 }

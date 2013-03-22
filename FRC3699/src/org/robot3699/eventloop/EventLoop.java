@@ -18,7 +18,7 @@ public class EventLoop {
         this.chandle=chandle;
     }
     
-    private void DoEventLoopIteration(){
+    public void DoEventLoopIteration(){
         if (this.dsource.getValue()){
             this.isMoving=!this.isMoving;
         }

@@ -18,6 +18,12 @@ public final class Constants {
     public static double Elevator_speed = 0.5;
     
     public static int shooterToggleButton = 4;
+    public static int shooterMultChannel=6;
+    public static int shooterPWMChannel=1;
+    public static int armMotorPWM=2;
+    public static int armToggleButton=5;
+    public static int armBottom = 1;
+    public static int armTop = 2;
     
     public static int robotdrive_break_button = 1;
     
