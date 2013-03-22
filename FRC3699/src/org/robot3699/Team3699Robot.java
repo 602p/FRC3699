@@ -80,6 +80,7 @@ public class Team3699Robot extends SimpleRobot {
     }
     
     public void operatorControl() {
+        try{
         showUserMessages("TeleOp");
         
         while (isOperatorControl()&&isEnabled()){
@@ -110,6 +111,9 @@ public class Team3699Robot extends SimpleRobot {
             
             Timer.delay(0.005); //and make sure we dont overload the cRIO
         }  
+        }catch (Exception be){
+            be.printStackTrace();
+        }
     }
     
     public void disabled(){
