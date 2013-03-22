@@ -8,10 +8,6 @@ package org.robot3699.eventloop;
  *
  * @author Louis
  */
-public abstract class ADigitalDataSource implements IDataSource{
-    public int getThreshold(){
-        return 1;
-    }
+public class AnalogDataSource {
     
-    public abstract int getValue();
 }

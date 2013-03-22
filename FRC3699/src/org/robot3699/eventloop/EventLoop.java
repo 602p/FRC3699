@@ -19,14 +19,9 @@ public class EventLoop {
     }
     
     private void DoEventLoopIteration(){
-        int value = dsource.getValue();
-        int threshold = dsource.getThreshold();
-        int return0;
-        if (this.isMoving && value < threshold)
-            return0=1;
-        else if (!this.isMoving && value > threshold)
-            return0=1;
-        else if (this.isMoving && value > threshold)
-            return0=0;
+        if (this.dsource.getValue()){
+            this.isMoving=!this.isMoving;
+        }
+        this.chandle.doCallBack(this.isMoving);
     }
 }

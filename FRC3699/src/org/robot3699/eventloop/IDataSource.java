@@ -9,7 +9,6 @@ package org.robot3699.eventloop;
  * @author Louis
  */
 public interface IDataSource{
-        public int getValue();
-        public int getThreshold();
+        public boolean getValue();
     }
    
