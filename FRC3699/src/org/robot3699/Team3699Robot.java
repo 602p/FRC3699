@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Team3699Robot extends SimpleRobot {
     
+    public AnalogChannel ana_chana = new AnalogChannel(5);
+    
     public Joystick joystick_left = new Joystick(Constants.joystick_left_USB);
     public Joystick joystick_right = new Joystick(Constants.joystick_right_USB);
     public Joystick joystick_elevator = new Joystick(3);
@@ -218,6 +220,7 @@ public class Team3699Robot extends SimpleRobot {
             SmartDashboard.putDouble("Optical Sensor", Optical_Sensor.getVoltage());
             SmartDashboard.putDouble("Battery Voltage", DriverStation.getInstance().getBatteryVoltage());
             SmartDashboard.putInt("dev_", dev_);
+            SmartDashboard.putDouble("AnalogChannel(createPortFromInt(5)).getVoltage() --> ", this.ana_chana.getVoltage());
             
             
             {
@@ -225,7 +228,7 @@ public class Team3699Robot extends SimpleRobot {
                 SmartDashboard.putInt("Distance To Target", Integer.parseInt(this.server.getString("Distance")));
                 //SmartDashboard.putString("NetworkTable Keys", this.server.);
             } catch (Exception be){
-                error("ERROR UPDATING SmartDashboard STACK TRACE: "+be.getMessage(), 1);
+                error("ERROR UPDATING SmartDashboard dtt STACK TRACE: "+be.getMessage(), 1);
             }
             }
     }
