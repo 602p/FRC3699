@@ -167,9 +167,9 @@ public class Team3699Robot extends SimpleRobot {
     public void autonomous(){
         log("Autonomus! (XD I am bad at spelling)");
         showUserMessages("Autonomous");
-        robotdrive.tankdrive(doRobotdriveScaling(-0.45),doRobotdriveScaling(-0.45));
+        robotdrive.tankDrive(doRobotdriveScaling(-0.45),doRobotdriveScaling(-0.45));
         Timer.delay(2.0);
-        robotdrive.tankdrive(doRobotdriveScaling(0.0),doRobotdriveScaling(0.0)); // Use to determine ft/s at this power.
+        robotdrive.tankDrive(doRobotdriveScaling(0.0),doRobotdriveScaling(0.0)); // Use to determine ft/s at this power.
     }
     
     public double doRobotdriveScaling(double value){
