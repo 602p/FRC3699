@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -37,6 +38,8 @@ public class Team3699Robot extends SimpleRobot {
     public ArmControl2 arm = new ArmControl2(this);
     public Jaguar armMotor = new Jaguar(Constants.armMotorPWM);
     
+    public AnalogChannel Optical_Sensor = new AnalogChannel(Constants.OpticalSensorChannel);
+    
     //public Jaguar test_CIM_1 = new Jaguar(7);
     //public Jaguar test_CIM_2 = new Jaguar(8);
     
@@ -52,6 +55,7 @@ public class Team3699Robot extends SimpleRobot {
     public Jaguar Elevator_motor = new Jaguar(Constants.elevator_PWM);
     public Jaguar Elevator_intake = new Jaguar(Constants.elevator_intake_PWM);
     public Jaguar Elevator_outtake = new Jaguar(Constants.elevator_outtake_PWM);
+   
     
     public boolean Intake = false;
     public boolean toggle = false;
@@ -118,6 +122,7 @@ public class Team3699Robot extends SimpleRobot {
         showUserMessages("TeleOp");
         
         while (isOperatorControl()&&isEnabled()){
+            robotdrive.setSafetyEnabled(true); //In case the program were to stop, this stops the motors from continuing to run.
             if (! Util.checkButton(this, Constants.robotdrive_break_button)){
                 robotdrive.tankDrive(doRobotdriveScaling(joystick_left.getY()), 
                         doRobotdriveScaling(joystick_right.getY()));
@@ -162,6 +167,9 @@ public class Team3699Robot extends SimpleRobot {
     public void autonomous(){
         log("Autonomus! (XD I am bad at spelling)");
         showUserMessages("Autonomous");
+        robotdrive.tankdrive(doRobotdriveScaling(-0.45),doRobotdriveScaling(-0.45));
+        Timer.delay(2.0);
+        robotdrive.tankdrive(doRobotdriveScaling(0.0),doRobotdriveScaling(0.0)); // Use to determine ft/s at this power.
     }
     
     public double doRobotdriveScaling(double value){
@@ -207,6 +215,7 @@ public class Team3699Robot extends SimpleRobot {
             
             SmartDashboard.putDouble("X", joystick_left.getX());
             SmartDashboard.putDouble("Y", joystick_left.getY());
+            SmartDashboard.putDouble("Optical Sensor", Optical_Sensor.getVoltage());
             SmartDashboard.putDouble("Battery Voltage", DriverStation.getInstance().getBatteryVoltage());
             SmartDashboard.putInt("dev_", dev_);
             

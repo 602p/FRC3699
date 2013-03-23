@@ -14,6 +14,7 @@ public class ArmControl2 {
     Team3699Robot robo;
     double armSpeed = 0.3d;
     int state=0;
+    ToggleButton toggle = new ToggleButton();
     DigitalInput bottomLimit=new DigitalInput(Constants.armBottom);
     DigitalInput topLimit = new DigitalInput(Constants.armTop);
     
@@ -32,13 +33,14 @@ public class ArmControl2 {
     }
     
     public void update(){
-        if (this.state==0 && Util.checkButton(this.robo, Constants.armToggleButton)){
+        this.toggle.update(Util.checkButton(robo, Constants.armToggleButton));
+        if (this.state==0 && toggle.get()){
             this.state = 1;
-        }else if (this.state==3 && Util.checkButton(this.robo, Constants.armToggleButton)){
+        }else if (this.state==3 && !toggle.get()){  //Used not operator in order 
+            this.state = 2;                         //to stop a cycling effect.                    
+        }else if (this.state==1 && !toggle.get()){  //Double Check please =).
             this.state = 2;
-        }else if (this.state==1 && Util.checkButton(this.robo, Constants.armToggleButton)){
-            this.state = 2;
-        }else if (this.state==2 && Util.checkButton(this.robo, Constants.armToggleButton)){
+        }else if (this.state==2 && toggle.get()){
             this.state = 1;
         }else if (this.state==1 && topLimit.get()){
             this.state = 3;
