@@ -105,7 +105,7 @@ public class Team3699Robot extends SimpleRobot {
             error("Reocourrence Test! You shouldnt see this!", 0);
         }
         log("Init SmartDashboard...");
-        this.server = NetworkTable.getTable("SmartDashboard");
+        this.server = NetworkTable.getTable("RoboRealm");
         
         /*LiveWindow.addActuator("Elevator", "Elevator Intake", Elevator_intake);
         LiveWindow.addActuator("Elevator", "Elevator Gearbox", Elevator_motor);
@@ -128,7 +128,7 @@ public class Team3699Robot extends SimpleRobot {
         showUserMessages("TeleOp");
         
         while (isOperatorControl()&&isEnabled()){
-            robotdrive.setSafetyEnabled(true); //In case the program were to stop, this stops the motors from continuing to run.
+            //robotdrive.setSafetyEnabled(true); //In case the program were to stop, this stops the motors from continuing to run.
             if (! Util.checkButton(this, Constants.robotdrive_break_button)){
                 robotdrive.tankDrive(doRobotdriveScaling(joystick_left.getY()), 
                         doRobotdriveScaling(joystick_right.getY()));
@@ -149,7 +149,8 @@ public class Team3699Robot extends SimpleRobot {
             }
             
             
-            updateSmartDashboard();
+            //updateSmartDashboard();
+            SmartDashboardUIControl.putALLTheDatatypes(this);
             
             this.shooter.updateStates(this);
             this.shooterMotor.set(this.shooter.calculateShooterSpeed());
