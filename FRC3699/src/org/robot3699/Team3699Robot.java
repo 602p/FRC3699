@@ -9,7 +9,6 @@ package org.robot3699;
 
 
 //import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Jaguar;
@@ -25,7 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Team3699Robot extends SimpleRobot {
     
-    public AnalogChannel ana_chana = new AnalogChannel(5);
+    
     
     public Joystick joystick_left = new Joystick(Constants.joystick_left_USB);
     public Joystick joystick_right = new Joystick(Constants.joystick_right_USB);
@@ -40,10 +39,12 @@ public class Team3699Robot extends SimpleRobot {
     public ArmControl2 arm = new ArmControl2(this);
     public Jaguar armMotor = new Jaguar(Constants.armMotorPWM);
     
-    public AnalogChannel Optical_Sensor = new AnalogChannel(Constants.OpticalSensorChannel);
+    public ElevatorShooterIntegrationControl integ = new ElevatorShooterIntegrationControl(this);
     
-    //public Jaguar test_CIM_1 = new Jaguar(7);
-    //public Jaguar test_CIM_2 = new Jaguar(8);
+    //public AnalogChannel Optical_Sensor = new AnalogChannel(Constants.OpticalSensorChannel);
+    
+    public Jaguar test_CIM_1 = new Jaguar(7);
+    public Jaguar test_CIM_2 = new Jaguar(8);
     
     public int Disc_Counter = 0;
     /*
@@ -53,10 +54,12 @@ public class Team3699Robot extends SimpleRobot {
     */
     
     public RobotDrive robotdrive = new RobotDrive(Constants.robotdrive_left_PWM,Constants.robotdrive_right_PWM);
-    public Jaguar Intake_motor =  new Jaguar(Constants.intake_PWM);
+   // public Jaguar Intake_motor =  new Jaguar(Constants.intake_PWM);
     public Jaguar Elevator_motor = new Jaguar(Constants.elevator_PWM);
-    public Jaguar Elevator_intake = new Jaguar(Constants.elevator_intake_PWM);
-    public Jaguar Elevator_outtake = new Jaguar(Constants.elevator_outtake_PWM);
+    //public Jaguar Elevator_intake = new Jaguar(Constants.elevator_intake_PWM);
+    //public Jaguar Elevator_outtake = new Jaguar(Constants.elevator_outtake_PWM);
+    
+    public ElevatorControl elevator = new ElevatorControl(this);
    
     
     public boolean Intake = false;
@@ -120,6 +123,7 @@ public class Team3699Robot extends SimpleRobot {
         log("Teleop Called Once!");
         resetError(1);
         resetError(2);
+        this.elevator.resetState();
         try{
         showUserMessages("TeleOp");
         
@@ -132,7 +136,7 @@ public class Team3699Robot extends SimpleRobot {
                 //        , doRobotdriveScaling(joystick_left.getX()));
             }
             
-            /*if (driverstation.getDigitalIn(3)){
+            if (driverstation.getDigitalIn(3)){
                 this.test_CIM_1.set(driverstation.getAnalogIn(2));
             }else{
                 this.test_CIM_1.set(0-driverstation.getAnalogIn(2));
@@ -142,7 +146,7 @@ public class Team3699Robot extends SimpleRobot {
                 this.test_CIM_2.set(driverstation.getAnalogIn(3));
             }else{
                 this.test_CIM_2.set(0-driverstation.getAnalogIn(3));
-            }*/
+            }
             
             
             updateSmartDashboard();
@@ -152,6 +156,11 @@ public class Team3699Robot extends SimpleRobot {
             
             this.arm.update();
             this.armMotor.set(this.arm.getArmSpeed());
+            
+            this.elevator.update();
+            this.Elevator_motor.set(this.elevator.getElevatorSpeed());
+            
+            this.integ.update();
             
             
             Timer.delay(0.005); //and make sure we dont overload the cRIO
@@ -217,11 +226,9 @@ public class Team3699Robot extends SimpleRobot {
             
             SmartDashboard.putDouble("X", joystick_left.getX());
             SmartDashboard.putDouble("Y", joystick_left.getY());
-            SmartDashboard.putDouble("Optical Sensor", Optical_Sensor.getVoltage());
+            //SmartDashboard.putDouble("Optical Sensor", Optical_Sensor.getVoltage());
             SmartDashboard.putDouble("Battery Voltage", DriverStation.getInstance().getBatteryVoltage());
             SmartDashboard.putInt("dev_", dev_);
-            SmartDashboard.putDouble("AnalogChannel(createPortFromInt(5)).getVoltage() --> ", this.ana_chana.getVoltage());
-            
             
             {
             try {

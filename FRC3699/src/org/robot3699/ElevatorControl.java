@@ -7,6 +7,7 @@
 
 package org.robot3699;
 
+import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 /**
@@ -15,14 +16,50 @@ import edu.wpi.first.wpilibj.DigitalInput;
  */
 public class ElevatorControl {
     public DigitalInput tickCounter = new DigitalInput(Constants.elevator_tick_sensor);
+    public DigitalInput intakeCounter = new DigitalInput(Constants.intake_tick_sensor);
     Team3699Robot robo;
     public double elevatorSpeed= 0.25;
+    public int state = 0;
+    public double cutOff=3d;
+    public double backUp=2.5d;
+    public AnalogChannel ana_chana = new AnalogChannel(5);
+    public int numDiscs = 0;
+    
+    //0=Stopped (wait for frisbee)
+    //1=Moving (up)
+    //2=E-Stop <-- No Reset!
     
     public ElevatorControl(Team3699Robot robo){
         this.robo=robo;
     }
     
-    public void getElevatorSpeed(){
-        
+    public double getElevatorSpeed(){
+        if (this.state == 1){
+            return this.elevatorSpeed;
+        }else{
+            return 0d;
+        }
+    }
+    
+    public void update(){
+        //Check for cutOff
+        if (!(this.state == 2) && this.ana_chana.getAverageVoltage()>this.cutOff){
+            this.robo.log("WARNING! Visual sensor max exceeded! Elevator Component E-Stopped.");
+            this.state=2;
+        }else if (this.state==0){
+            if (!this.intakeCounter.get()){
+                this.state=1;
+                this.numDiscs++;
+            }
+        }else if (this.state==1){
+            if (this.tickCounter.get()){
+                this.state=0;
+            }
+        }
+    }
+    
+    public void resetState(){
+        this.state=0;
+        this.robo.log("RESETTING ELEVATOR VARIBLE");
     }
 }

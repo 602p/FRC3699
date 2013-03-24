@@ -20,7 +20,6 @@ public class ShooterControl {
         this.shooterSpeedLevels[2]=2;
         this.shooterSpeedLevels[3]=3;
         this.shooterSpeedLevels[4]=4;
-        this.shooterSpeedLevels[5]=5;
     }
     
     public double calculateShooterSpeed(){
