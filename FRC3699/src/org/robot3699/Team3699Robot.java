@@ -46,7 +46,6 @@ public class Team3699Robot extends SimpleRobot {
     public Jaguar test_CIM_1 = new Jaguar(7);
     public Jaguar test_CIM_2 = new Jaguar(8);
     
-    public int Disc_Counter = 0;
     /*
     public DigitalInput Disc_Check = new DigitalInput(Constants.Disc_Check_Channel);
     public DigitalInput Disc_Top_Check = new DigitalInput(Constants.Disc_Top_Check_Channel);
@@ -54,12 +53,13 @@ public class Team3699Robot extends SimpleRobot {
     */
     
     public RobotDrive robotdrive = new RobotDrive(Constants.robotdrive_left_PWM,Constants.robotdrive_right_PWM);
-   // public Jaguar Intake_motor =  new Jaguar(Constants.intake_PWM);
+    public Jaguar Intake_motor =  new Jaguar(Constants.intake_PWM);
     public Jaguar Elevator_motor = new Jaguar(Constants.elevator_PWM);
     //public Jaguar Elevator_intake = new Jaguar(Constants.elevator_intake_PWM);
     //public Jaguar Elevator_outtake = new Jaguar(Constants.elevator_outtake_PWM);
     
     public ElevatorControl elevator = new ElevatorControl(this);
+    public IntakeControl intake = new IntakeControl();
    
     
     public boolean Intake = false;
@@ -159,6 +159,9 @@ public class Team3699Robot extends SimpleRobot {
             
             this.elevator.update();
             this.Elevator_motor.set(this.elevator.getElevatorSpeed());
+            
+            this.intake.update();
+            this.Intake_motor.set(this.intake.calculateIntakeSpeed());
             
             this.integ.update();
             

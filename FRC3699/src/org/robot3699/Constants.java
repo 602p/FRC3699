@@ -15,6 +15,7 @@ public final class Constants {
     public static int driverstation_scale_toggle_channel2 = 2;
     public static int driverstation_scale_channel = 1; //
     public static double Intake_speed = 0.5;
+    public static double Reverse_Intake_speed = -0.25;
     public static double Elevator_speed = 0.25;
     
     public static int shooterToggleButton = 4;
@@ -33,8 +34,9 @@ public final class Constants {
     
     public static int shoot_button = 2;
     
+    public static int intake_button = 3;
+    
     /*
-    public static int intake_button = 2;
     public static int elevator_button = 3;
     public static int shooter_button = 4;
     public static int Disc_Check_Channel = 1;
