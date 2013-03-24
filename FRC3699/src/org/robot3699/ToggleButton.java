@@ -13,16 +13,13 @@ public class ToggleButton {
     public boolean output = false;
     
     public void update(boolean input){
-        if (input && this.state){
-            this.state=false;
-            if(this.output){
-                this.output = false; 
-            }
-            else {
-                this.output = true;
-            }
-        }else if (!input){
-            this.state = true;
+        if (this.state && this.output){
+            this.output=false;
+        }if (input && !this.state){
+            this.state=true;
+            this.output=true;
+        }else if (!input && this.state){
+            this.state = false;
         }
     }
     

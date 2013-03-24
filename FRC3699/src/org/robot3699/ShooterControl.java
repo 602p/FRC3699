@@ -12,7 +12,7 @@ public class ShooterControl {
     public double[] shooterSpeedLevels = new double[5];
     public double shooterSpeedMultiplier = 1.0d;
     public int shooterSpeedState = 0;
-    public boolean  toggleButtonState = false;
+    public ToggleButton button = new ToggleButton();
     
     {
         this.shooterSpeedLevels[0]=0;
@@ -23,20 +23,20 @@ public class ShooterControl {
     }
     
     public double calculateShooterSpeed(){
+        System.out.println("wtf?");
         return this.shooterSpeedLevels[this.shooterSpeedState]*this.shooterSpeedMultiplier;
     }
     
     public void updateStates(Team3699Robot robo){
-        if (robo.joystick_left.getRawButton(Constants.shooterToggleButton) && !this.toggleButtonState){
-            this.toggleButtonState=true;
+        System.out.println("ftw!");
+        this.button.update(Util.checkButton(robo, Constants.shooterToggleButton));
+        if (this.button.get()){
             this.shooterSpeedState++;
-            if (this.shooterSpeedState>this.shooterSpeedLevels.length){
+            if (this.shooterSpeedState>4){
                 this.shooterSpeedState=0;
             }
-        }else if (!robo.joystick_left.getRawButton(Constants.shooterToggleButton) && this.toggleButtonState){
-            this.toggleButtonState=false;
         }
-        
         this.shooterSpeedMultiplier=robo.driverstation.getAnalogIn(Constants.shooterMultChannel);
-    }
+    
+}
 }

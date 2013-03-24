@@ -18,7 +18,7 @@ public final class Constants {
     public static double Elevator_speed = 0.25;
     
     public static int shooterToggleButton = 4;
-    public static int shooterMultChannel=6;
+    public static int shooterMultChannel=4;
     public static int shooterPWMChannel=1; //
     public static int armMotorPWM=2;
     public static int OpticalSensorChannel=1; //

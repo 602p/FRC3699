@@ -230,6 +230,36 @@ public class Team3699Robot extends SimpleRobot {
             SmartDashboard.putDouble("Battery Voltage", DriverStation.getInstance().getBatteryVoltage());
             SmartDashboard.putInt("dev_", dev_);
             
+            SmartDashboard.putDouble("Elevator Sensor Value (.getAverageVoltage())", this.elevator.ana_chana.getAverageVoltage());
+            
+            String state = "ROBOT STATE INFORMATION:";
+            if (this.elevator.state==0){
+                state=state+"\nElevator Stopped.";
+            }if (this.elevator.state==1){
+                state=state+"\nElevator Moving.";
+            }if (this.elevator.state==2){
+                state=state+"\nElevator E-Stopped.";
+            }
+            
+            state = state+"\nShooter Power Level (Raw): "+this.shooter.calculateShooterSpeed();
+            state = state+"\nShooter Power Level (Setting): "+this.shooter.shooterSpeedState;
+            
+            if (this.integ.globalState==1){
+                state = state+"\nMoving Shooter Up To Shoot.";
+            }if (this.integ.globalState==2){
+                state = state+"\nShooting!";
+            }if (this.integ.globalState2LOCK){
+                state = state+"\nREALLY SHOOTING!.";
+            }
+            
+            state = state+"\nNumber Of Discs: "+this.elevator.numDiscs;
+            
+            state = state + "\n Louis + Bobni Are Amazing (Hiding This Message Is ILLEGAL! IT WILL STOP THE ROBOT!)";
+            
+            
+            
+            SmartDashboard.putString("State", state);
+            
             {
             try {
                 SmartDashboard.putInt("Distance To Target", Integer.parseInt(this.server.getString("Distance")));

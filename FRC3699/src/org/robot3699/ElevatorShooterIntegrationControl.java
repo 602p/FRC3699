@@ -18,14 +18,15 @@ public class ElevatorShooterIntegrationControl {
     //0=Idle
     //1=Bringing Elevator Up / Idle
     //2=Bringing Elevator Up / Done / Idle
-    //3=N/A
+    //3=Jiggling!
+    //4=Done jigglineg! (RESET TO 0)
     
+    public boolean globalState2LOCK = false;
     public int globalState=0;
     
     //0=Idle
     //1=Elevator Operations --> elevatorState (==> 2)
-    //2=Jiggle Operations -->jiggleState?
-    //3=Shoot! (for reals)
+    //2=Jiggle Operations --> AND SHOOT
     
     public ToggleButton shootToggle = new ToggleButton();
     
@@ -44,20 +45,28 @@ public class ElevatorShooterIntegrationControl {
         public synchronized void run(){
         this.robo.elevator.state=1;
         while (!(robo.elevator.ana_chana.getAverageVoltage()<this.goodPlaceToShoot)){}
-        this.robo.elevator.state=0;
+        this.robo.elevator.state=2;
+        this.robo.integ.elevatorState=2;
+        this.robo.integ.globalState=2;
     }
     }
     
     private class jiggleElevatorStateWrapper implements Runnable{
         Team3699Robot robo;
         double correctLocation=1.9d;
+        double adjSpeed = 0.3d;
         public jiggleElevatorStateWrapper(Team3699Robot robo){
             this.robo=robo;
         }
         
         public void run(){
-            //while ()
-            //T ODO: Make Jiggle
+            this.robo.elevator.state=2;
+            this.robo.Elevator_motor.set(this.adjSpeed);
+            while (this.robo.elevator.ana_chana.getAverageVoltage() > this.correctLocation) {}
+            this.robo.Elevator_motor.set(0d);
+            this.robo.elevator.state=0;
+            this.robo.integ.globalState=0;
+            this.robo.integ.globalState2LOCK=false;
         }
     }
     
@@ -65,16 +74,26 @@ public class ElevatorShooterIntegrationControl {
         
         this.elevatorState = 1;
         
+        this.globalState=1;
+        
         bringElevatorUpToShootWrapper wrapper = new bringElevatorUpToShootWrapper(this.robo);
         
         Thread thread = new Thread(wrapper);
         
         thread.start();
         
-        this.elevatorState = 2;
+    }
+    
+    private synchronized void jiggleElevatorStateNonBlocking(){
         
+        this.elevatorState=3;
         this.globalState=2;
         
+        jiggleElevatorStateWrapper wrapper = new jiggleElevatorStateWrapper(this.robo);
+        
+        Thread thread = new Thread(wrapper);
+        
+        thread.start();
     }
     
     public void updateIntegratedModules(){
@@ -85,10 +104,10 @@ public class ElevatorShooterIntegrationControl {
         this.shootToggle.update(Util.checkButton(this.robo, Constants.shoot_button));
         if (this.shootToggle.get() && this.globalState==0){
             this.bringElevatorUpToShootNonBlocking();
-            this.globalState=1;
         }
-        else if (this.globalState==2){
-            
+        else if (this.globalState==2 && !this.globalState2LOCK){
+            this.globalState2LOCK=true;
+            this.jiggleElevatorStateNonBlocking();
         }
         
     }
