@@ -23,12 +23,12 @@ public class ShooterControl {
     }
     
     public double calculateShooterSpeed(){
-        System.out.println("wtf?");
+//        System.out.println("wtf?");
         return this.shooterSpeedLevels[this.shooterSpeedState]*this.shooterSpeedMultiplier;
     }
     
     public void updateStates(Team3699Robot robo){
-        System.out.println("ftw!");
+//        System.out.println("ftw!");
         this.button.update(Util.checkButton(robo, Constants.shooterToggleButton));
         if (this.button.get()){
             this.shooterSpeedState++;
