@@ -262,6 +262,7 @@ public class Team3699Robot extends SimpleRobot {
             
             
             SmartDashboard.putString("State", state);
+            SmartDashboard.putBoolean("Intake",this.intake.toggle.get());
             
             {
             try {
