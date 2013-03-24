@@ -18,7 +18,7 @@ public class ElevatorControl {
     public DigitalInput tickCounter = new DigitalInput(Constants.elevator_tick_sensor);
     public DigitalInput intakeCounter = new DigitalInput(Constants.intake_tick_sensor);
     Team3699Robot robo;
-    public double elevatorSpeed= 0.25;
+    public double elevatorSpeed= Constants.Elevator_speed;
     public int state = 0;
     public double cutOff=3d;
     public double backUp=2.5d;
