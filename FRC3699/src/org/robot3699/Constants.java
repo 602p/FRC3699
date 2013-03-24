@@ -10,7 +10,7 @@ public final class Constants {
     public static int elevator_intake_PWM = 6;
     public static int elevator_outtake_PWM = 9;
     public static double robotdrive_scale_hi = 0.9;
-    public static String version = "VERSION=0.2.1*mspa_ftw";
+    public static String version = "VERSION=0.2.2*mspa_ftw";
     public static int driverstation_scale_toggle_channel = 1; //
     public static int driverstation_scale_toggle_channel2 = 2;
     public static int driverstation_scale_channel = 1; //
