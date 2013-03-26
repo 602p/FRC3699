@@ -43,12 +43,12 @@ public class ElevatorShooterIntegrationControl {
             //this.ctrl=ctrl;
         }
         public synchronized void run(){
-        this.robo.elevator.state=1;
-        while (!(robo.elevator.ana_chana.getAverageVoltage()<this.goodPlaceToShoot)){}
-        this.robo.elevator.state=2;
-        this.robo.integ.elevatorState=2;
-        this.robo.integ.globalState=2;
-    }
+            this.robo.elevator.state=1;
+            while (!(robo.elevator.ana_chana.getAverageVoltage()<this.goodPlaceToShoot)){}
+            this.robo.elevator.state=2;
+            this.robo.integ.elevatorState=2;
+            this.robo.integ.globalState=2;
+        }
     }
     
     private class jiggleElevatorStateWrapper implements Runnable{
