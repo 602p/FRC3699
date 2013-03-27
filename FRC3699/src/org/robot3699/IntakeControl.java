@@ -15,6 +15,10 @@ public class IntakeControl {
     public Team3699Robot robo;
     ToggleButton toggle = new ToggleButton();
     
+    public IntakeControl(Team3699Robot robo){
+        this.robo=robo;
+    }
+    
     public double calculateIntakeSpeed(){
         if (this.state == 1) {
             return this.intakespeed;

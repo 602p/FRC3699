@@ -59,7 +59,7 @@ public class Team3699Robot extends SimpleRobot {
     //public Jaguar Elevator_outtake = new Jaguar(Constants.elevator_outtake_PWM);
     
     public ElevatorControl elevator = new ElevatorControl(this);
-    public IntakeControl intake = new IntakeControl();
+    public IntakeControl intake = new IntakeControl(this);
    
     
     public boolean Intake = false;
@@ -74,7 +74,7 @@ public class Team3699Robot extends SimpleRobot {
     //ERRNO 1: SmartDashboard error
     //ERRNO 2: Teleop error
     
-    public boolean allowUnlimitedErrors = false;
+    public boolean allowUnlimitedErrors = true;
     
     //Set to true to allow unlimeted errors
     
@@ -96,16 +96,24 @@ public class Team3699Robot extends SimpleRobot {
     public void robotInit(){
         log("RobotInit called. Initializing NetworkTabes...");
         try {
-        NetworkTable.setIPAddress("10.36.99.2");
-        
-            NetworkTable.initialize();
-            NetworkTable.setServerMode();
+           NetworkTable.setIPAddress("10.36.99.2");
+           NetworkTable.setServerMode();
+           NetworkTable.setTeam(3699);
+           NetworkTable.initialize();
+            
         }catch (Exception be){
             error("Error in robotInit: \n "+be.getMessage(), 0);
             error("Reocourrence Test! You shouldnt see this!", 0);
         }
         log("Init SmartDashboard...");
         this.server = NetworkTable.getTable("SmartDashboard");
+        
+        log(""+this.server.containsKey("/SmartDashboard/"));
+        log(""+this.server.containsKey("/SmartDashboard/FPS"));
+        log(""+this.server.DEFAULT_PORT);
+        this.server.putString("_PREINIT0", "_PREINIT::0");
+        this.server.putString("_PREINIT1", "_PREINIT::1");
+        this.server.putString("_PREINIT2", "_PREINIT::2");
         
         /*LiveWindow.addActuator("Elevator", "Elevator Intake", Elevator_intake);
         LiveWindow.addActuator("Elevator", "Elevator Gearbox", Elevator_motor);
@@ -124,7 +132,7 @@ public class Team3699Robot extends SimpleRobot {
         resetError(1);
         resetError(2);
         this.elevator.resetState();
-        try{
+//        try{
         showUserMessages("TeleOp");
         
         while (isOperatorControl()&&isEnabled()){
@@ -165,12 +173,25 @@ public class Team3699Robot extends SimpleRobot {
             
             this.integ.update();
             
+            {
+            try {
+                SmartDashboard.putString("DEBUG*isConnected", ""+this.server.isConnected());
+                SmartDashboard.putString("DEBUG*isServer", ""+this.server.isServer());
+                SmartDashboard.putDouble("FPS~!", this.server.getNumber("FPS", -1d));
+                SmartDashboard.putDouble("NewDistance~!", this.server.getNumber("NewDistance", -1d));
+                //SmartDashboard.putString("NetworkTable Keys", this.server.);
+                
+                log("W0RK1NG!");
+            } catch (Exception be){
+                error("ERROR UPDATING SmartDashboard dtt STACK TRACE: "+be.getMessage(), 1);
+            }
+            }
             
             Timer.delay(0.005); //and make sure we dont overload the cRIO
         }  
-        }catch (Exception be){
-            error("ERROR IN TELEOP! STACKTRACE: \n "+be.getMessage(), 2);
-        }
+//        }catch (Exception be){
+//            error("ERROR IN TELEOP! STACKTRACE: \n "+be.getMessage(), 2);
+//        }
     }
     
     public void disabled(){
@@ -195,7 +216,7 @@ public class Team3699Robot extends SimpleRobot {
                 if (driverstation.getAnalogIn(Constants.driverstation_scale_channel)<1){
                     return value*driverstation.getAnalogIn(Constants.driverstation_scale_channel);
                 }
-                driverstation.setDigitalOut(3, true);
+                driverstation.setDigitalOut(3, true); 
                 return 0;
             }
             driverstation.setDigitalOut(3, false);
@@ -264,13 +285,6 @@ public class Team3699Robot extends SimpleRobot {
             SmartDashboard.putString("State", state);
             SmartDashboard.putBoolean("Intake",this.intake.toggle.get());
             
-            {
-            try {
-                SmartDashboard.putInt("Distance To Target", Integer.parseInt(this.server.getString("Distance")));
-                //SmartDashboard.putString("NetworkTable Keys", this.server.);
-            } catch (Exception be){
-                error("ERROR UPDATING SmartDashboard dtt STACK TRACE: "+be.getMessage(), 1);
-            }
-            }
+            
     }
 }

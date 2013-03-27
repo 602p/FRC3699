@@ -5,7 +5,7 @@ public final class Constants {
     public static int joystick_right_USB = 2;
     public static int robotdrive_left_PWM = 3;
     public static int robotdrive_right_PWM = 4;
-    public static int intake_PWM = 1; //
+    public static int intake_PWM = 6; //
     public static int elevator_PWM = 5;
     public static int elevator_intake_PWM = 6;
     public static int elevator_outtake_PWM = 9;
