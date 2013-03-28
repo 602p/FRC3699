@@ -49,6 +49,7 @@ public class IntegrationControl2 {
         
         if (this.state == 3 && this.robo.elevator.tickCounter.get()){
             this.state=0;
+            this.robo.elevator.state=0;
         }
     }
 }
