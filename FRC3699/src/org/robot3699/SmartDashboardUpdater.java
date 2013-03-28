@@ -19,5 +19,6 @@ public class SmartDashboardUpdater {
         SmartDashboard.putNumber("Distance To Target", robo.server.getNumber("NewDistance"));
         SmartDashboard.putBoolean("Target Locked", robo.server.getBoolean("locked"));
         SmartDashboard.putBoolean("Connected To RoboRealm", robo.server.isConnected());
+        SmartDashboard.putNumber("FPS (This Is A Camera Lag Indicatior", robo.server.getNumber("FPS"));
     }
 }
