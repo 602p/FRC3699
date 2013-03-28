@@ -39,7 +39,7 @@ public class Team3699Robot extends SimpleRobot {
     public ArmControl2 arm = new ArmControl2(this);
     public Jaguar armMotor = new Jaguar(Constants.armMotorPWM);
     
-    public ElevatorShooterIntegrationControl integ = new ElevatorShooterIntegrationControl(this);
+    public IntegrationControl2 integ = new IntegrationControl2(this);
     
     //public AnalogChannel Optical_Sensor = new AnalogChannel(Constants.OpticalSensorChannel);
     
@@ -110,7 +110,7 @@ public class Team3699Robot extends SimpleRobot {
         
         log(""+this.server.containsKey("/SmartDashboard/"));
         log(""+this.server.containsKey("/SmartDashboard/FPS"));
-        log(""+this.server.DEFAULT_PORT);
+        log(""+NetworkTable.DEFAULT_PORT);
         this.server.putString("_PREINIT0", "_PREINIT::0");
         this.server.putString("_PREINIT1", "_PREINIT::1");
         this.server.putString("_PREINIT2", "_PREINIT::2");
@@ -268,13 +268,13 @@ public class Team3699Robot extends SimpleRobot {
             state = state+"\nShooter Power Level (Raw): "+this.shooter.calculateShooterSpeed();
             state = state+"\nShooter Power Level (Setting): "+this.shooter.shooterSpeedState;
             
-            if (this.integ.globalState==1){
-                state = state+"\nMoving Shooter Up To Shoot.";
-            }if (this.integ.globalState==2){
-                state = state+"\nShooting!";
-            }if (this.integ.globalState2LOCK){
-                state = state+"\nREALLY SHOOTING!.";
-            }
+            //if (this.integ.globalState==1){
+            //    state = state+"\nMoving Shooter Up To Shoot.";
+            //}if (this.integ.globalState==2){
+            //    state = state+"\nShooting!";
+            //}if (this.integ.globalState2LOCK){
+           //     state = state+"\nREALLY SHOOTING!.";
+           // }
             
             state = state+"\nNumber Of Discs: "+this.elevator.numDiscs;
             

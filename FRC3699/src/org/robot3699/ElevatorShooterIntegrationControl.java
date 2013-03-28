@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Jaguar;
  * @author Louis
  */
 public class ElevatorShooterIntegrationControl {
+    /*
     public Team3699Robot robo;
     public Jaguar elevator_out_roller = new Jaguar(Constants.elevator_outtake_PWM);
     public int elevatorState=0;
@@ -111,4 +112,5 @@ public class ElevatorShooterIntegrationControl {
         }
         
     }
+    * */
 }
