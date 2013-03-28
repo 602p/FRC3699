@@ -20,10 +20,12 @@ public class ElevatorControl {
     Team3699Robot robo;
     public double elevatorSpeed= Constants.Elevator_speed;
     public int state = 0;
-    public double cutOff=3d;
-    public double backUp=2.5d;
+    public double cutOff=2.5d;
+    public double backUp=2d;
     public AnalogChannel ana_chana = new AnalogChannel(5);
     public int numDiscs = 0;
+    public ToggleButton tickCounterToggle = new ToggleButton();
+    
     
     //0=Stopped (wait for frisbee)
     //1=Moving (up)
@@ -31,6 +33,7 @@ public class ElevatorControl {
     
     public ElevatorControl(Team3699Robot robo){
         this.robo=robo;
+        this.robo.Elevator_motor.setSafetyEnabled(false);
     }
     
     public double getElevatorSpeed(){
@@ -43,6 +46,7 @@ public class ElevatorControl {
     
     public void update(){
         //Check for cutOff
+        this.tickCounterToggle.update(this.tickCounter.get());
         if (!(this.state == 2) && this.ana_chana.getAverageVoltage()>this.cutOff){
             this.robo.log("WARNING! Visual sensor max exceeded! Elevator Component E-Stopped.");
             this.state=2;
@@ -52,7 +56,7 @@ public class ElevatorControl {
                 this.numDiscs++;
             }
         }else if (this.state==1){
-            if (this.tickCounter.get()){
+            if (this.tickCounterToggle.get()){
                 this.state=0;
             }
         }

@@ -33,18 +33,18 @@ public class Team3699Robot extends SimpleRobot {
     public DriverStation driverstation = DriverStation.getInstance();
     public NetworkTable server;
     
-    public ShooterControl shooter = new ShooterControl();
-    public Jaguar shooterMotor = new Jaguar(Constants.shooterPWMChannel);
+//    public ShooterControl shooter = new ShooterControl();
+//    public Jaguar shooterMotor = new Jaguar(Constants.shooterPWMChannel);
     
-    public ArmControl2 arm = new ArmControl2(this);
-    public Jaguar armMotor = new Jaguar(Constants.armMotorPWM);
+//    public ArmControl2 arm = new ArmControl2(this);
+//    public Jaguar armMotor = new Jaguar(Constants.armMotorPWM);
     
     public IntegrationControl2 integ = new IntegrationControl2(this);
     
     //public AnalogChannel Optical_Sensor = new AnalogChannel(Constants.OpticalSensorChannel);
     
-    public Jaguar test_CIM_1 = new Jaguar(7);
-    public Jaguar test_CIM_2 = new Jaguar(8);
+//    public Jaguar test_CIM_1 = new Jaguar(7);
+//    public Jaguar test_CIM_2 = new Jaguar(8);
     
     /*
     public DigitalInput Disc_Check = new DigitalInput(Constants.Disc_Check_Channel);
@@ -55,6 +55,8 @@ public class Team3699Robot extends SimpleRobot {
     public RobotDrive robotdrive = new RobotDrive(Constants.robotdrive_left_PWM,Constants.robotdrive_right_PWM);
     public Jaguar Intake_motor =  new Jaguar(Constants.intake_PWM);
     public Jaguar Elevator_motor = new Jaguar(Constants.elevator_PWM);
+    public Jaguar Elevator_intake_motor = new Jaguar(Constants.elevator_intake_PWM);
+    public Jaguar pullDownJaguar = new Jaguar(Constants.pulldownPWM);
     //public Jaguar Elevator_intake = new Jaguar(Constants.elevator_intake_PWM);
     //public Jaguar Elevator_outtake = new Jaguar(Constants.elevator_outtake_PWM);
     
@@ -144,34 +146,54 @@ public class Team3699Robot extends SimpleRobot {
                 //        , doRobotdriveScaling(joystick_left.getX()));
             }
             
-            if (driverstation.getDigitalIn(3)){
-                this.test_CIM_1.set(driverstation.getAnalogIn(2));
-            }else{
-                this.test_CIM_1.set(0-driverstation.getAnalogIn(2));
-            }
-            
-            if (driverstation.getDigitalIn(4)){
-                this.test_CIM_2.set(driverstation.getAnalogIn(3));
-            }else{
-                this.test_CIM_2.set(0-driverstation.getAnalogIn(3));
-            }
+//            if (driverstation.getDigitalIn(3)){
+//                this.test_CIM_1.set(driverstation.getAnalogIn(2));
+//            }else{
+//                this.test_CIM_1.set(0-driverstation.getAnalogIn(2));
+//            }
+//            
+//            if (driverstation.getDigitalIn(4)){
+//                this.test_CIM_2.set(driverstation.getAnalogIn(3));
+//            }else{
+//                this.test_CIM_2.set(0-driverstation.getAnalogIn(3));
+//            }
             
             
             updateSmartDashboard();
             
-            this.shooter.updateStates(this);
-            this.shooterMotor.set(this.shooter.calculateShooterSpeed());
+//            this.shooter.updateStates(this);
+//            this.shooterMotor.set(this.shooter.calculateShooterSpeed());
             
-            this.arm.update();
-            this.armMotor.set(this.arm.getArmSpeed());
+//            this.arm.update();
+//            this.armMotor.set(this.arm.getArmSpeed());
             
+            if (this.integ.doElevatorUpdate()){
             this.elevator.update();
             this.Elevator_motor.set(this.elevator.getElevatorSpeed());
+            }
             
             this.intake.update();
             this.Intake_motor.set(this.intake.calculateIntakeSpeed());
+            if (this.intake.state==1){
+            this.Elevator_intake_motor.set(0.6D);
+            }else{
+                this.Elevator_intake_motor.set(0D);
+            }
             
             this.integ.update();
+            
+            SmartDashboardUpdater.updateSmartDashboard(this);
+            
+            if (Util.checkButton(this, 9)){
+            
+              this.elevator.numDiscs=0;
+            }
+            if (Util.checkButton(this, 8)){
+                this.elevator.state=0;
+                this.integ.state=0;
+                this.intake.state=0;
+                this.integ.elevator_out_roller.set(0d);
+            }
             
             {
             try {
@@ -265,8 +287,8 @@ public class Team3699Robot extends SimpleRobot {
                 state=state+"\nElevator E-Stopped.";
             }
             
-            state = state+"\nShooter Power Level (Raw): "+this.shooter.calculateShooterSpeed();
-            state = state+"\nShooter Power Level (Setting): "+this.shooter.shooterSpeedState;
+//            state = state+"\nShooter Power Level (Raw): "+this.shooter.calculateShooterSpeed();
+//            state = state+"\nShooter Power Level (Setting): "+this.shooter.shooterSpeedState;
             
             //if (this.integ.globalState==1){
             //    state = state+"\nMoving Shooter Up To Shoot.";

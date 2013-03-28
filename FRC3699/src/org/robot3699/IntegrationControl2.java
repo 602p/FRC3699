@@ -21,6 +21,19 @@ public class IntegrationControl2 {
     //2=spin up outake
     //3=jiggle
     
+    private class TimedJiggleThread implements Runnable{
+        private final Team3699Robot robo;
+        public TimedJiggleThread(Team3699Robot robo){
+            this.robo=robo;
+        }
+        public void run(){
+            try {
+                Thread.sleep(1000L);
+            } catch (InterruptedException ex) {}
+            this.robo.integ.state=4;
+        }
+    }
+    
      public IntegrationControl2(Team3699Robot robo){
          this.robo=robo;
     }
@@ -30,7 +43,7 @@ public class IntegrationControl2 {
         if (this.shooterToggle.get() && this.state==0){
             this.state=1;
             this.robo.Elevator_motor.setSafetyEnabled(false);
-            this.robo.Elevator_motor.set(-0.3d);
+            this.robo.Elevator_motor.set(0.5d);
         }else if (this.state==1){
             if (this.robo.elevator.ana_chana.getAverageVoltage()>this.readyState){
                 this.state=2;
@@ -43,13 +56,28 @@ public class IntegrationControl2 {
            this.state=3;
         }else if (this.state==3){
             this.robo.Elevator_motor.setSafetyEnabled(false);
-            this.robo.Elevator_motor.set(-0.3d);
+            this.robo.Elevator_motor.set(-0.5d);
+            this.robo.Elevator_motor.setSafetyEnabled(false);
+            this.robo.Elevator_motor.set(-0.5);
+            this.elevator_out_roller.setSafetyEnabled(false);
+            this.elevator_out_roller.set(0.8d);
             this.robo.elevator.numDiscs--;
+            TimedJiggleThread j = new TimedJiggleThread(this.robo);
+            Thread t = new Thread(j);
+            t.start();
         }
         
-        if (this.state == 3 && this.robo.elevator.tickCounter.get()){
+        if (this.state == 4){
             this.state=0;
             this.robo.elevator.state=0;
+            this.elevator_out_roller.setSafetyEnabled(true);
+            this.robo.Elevator_motor.setSafetyEnabled(true);
+            this.elevator_out_roller.set(0d);
+            this.robo.Elevator_motor.set(0d);
         }
+    }
+    
+    public boolean doElevatorUpdate(){
+        return !(this.state==1);
     }
 }
