@@ -15,6 +15,7 @@ public class IntegrationControl2 {
     public ToggleButton shooterToggle = new ToggleButton();
     public Jaguar elevator_out_roller = new Jaguar(Constants.elevator_outtake_PWM);
     double readyState=2.5d;
+    public double takeDownTo = 2.3d;
     int state = 0;
     //0=off
     //1=move elevator up
@@ -54,20 +55,24 @@ public class IntegrationControl2 {
            this.elevator_out_roller.setSafetyEnabled(false);
            this.elevator_out_roller.set(0.8d);
            this.state=3;
+           this.elevator_out_roller.setSafetyEnabled(false);
+           this.robo.Elevator_motor.setSafetyEnabled(false);
+           this.robo.Elevator_motor.setSafetyEnabled(false);
         }else if (this.state==3){
-            this.robo.Elevator_motor.setSafetyEnabled(false);
+            
             this.robo.Elevator_motor.set(-0.5d);
-            this.robo.Elevator_motor.setSafetyEnabled(false);
+            
             this.robo.Elevator_motor.set(-0.5);
-            this.elevator_out_roller.setSafetyEnabled(false);
+            
             this.elevator_out_roller.set(0.8d);
-            this.robo.elevator.numDiscs--;
-            TimedJiggleThread j = new TimedJiggleThread(this.robo);
-            Thread t = new Thread(j);
-            t.start();
+            
+            if (this.robo.elevator.ana_chana.getAverageVoltage()<this.takeDownTo){
+                this.state=4;
+            }
         }
         
         if (this.state == 4){
+            this.robo.elevator.numDiscs--;
             this.state=0;
             this.robo.elevator.state=0;
             this.elevator_out_roller.setSafetyEnabled(true);

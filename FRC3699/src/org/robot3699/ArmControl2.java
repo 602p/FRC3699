@@ -36,9 +36,9 @@ public class ArmControl2 {
         this.toggle.update(Util.checkButton(robo, Constants.armToggleButton));
         if (this.state==0 && toggle.get()){
             this.state = 1;
-        }else if (this.state==3 && !toggle.get()){  //Used not operator in order 
+        }else if (this.state==3 && toggle.get()){  //Used not operator in order 
             this.state = 2;                         //to stop a cycling effect.                    
-        }else if (this.state==1 && !toggle.get()){  //Double Check please =).
+        }else if (this.state==1 && toggle.get()){  //Double Check please =).
             this.state = 2;
         }else if (this.state==2 && toggle.get()){
             this.state = 1;
