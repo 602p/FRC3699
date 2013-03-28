@@ -22,7 +22,7 @@ public class IntakeControl {
     public double calculateIntakeSpeed(){
         if (this.state == 1) {
             return this.intakespeed;
-        }else if (robo.elevator.numDiscs >= 4) {
+        }else if (this.robo.elevator.numDiscs >= 4) {
             return this.reverseintakespeed;
         }else {
             return 0d;
