@@ -38,5 +38,5 @@ public class ShooterControl {
         }
         this.shooterSpeedMultiplier=robo.driverstation.getAnalogIn(Constants.shooterMultChannel);
     
-}
+    }   
 }

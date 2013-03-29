@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj
 
@@ -34,7 +35,7 @@ public class Team3699Robot extends SimpleRobot {
     public NetworkTable server;
     
 //    public ShooterControl shooter = new ShooterControl();
-//    public Jaguar shooterMotor = new Jaguar(Constants.shooterPWMChannel);
+      public Jaguar shooterMotor = new Jaguar(Constants.shooterPWMChannel);
     
 //    public ArmControl2 arm = new ArmControl2(this);
 //    public Jaguar armMotor = new Jaguar(Constants.armMotorPWM);
@@ -62,11 +63,10 @@ public class Team3699Robot extends SimpleRobot {
     
     public ElevatorControl elevator = new ElevatorControl(this);
     public IntakeControl intake = new IntakeControl(this);
+    public Auto_Integration2 integ2 = new Auto_Integration2(this);
+    public Shoot3Auto auto_shoot = new Shoot3Auto(this);
+    //SendableChooser autoChooser;
    
-    
-    public boolean Intake = false;
-    public boolean toggle = false;
-    
     int dev_=0;
     
     public boolean[] errors = new boolean[10];
@@ -125,6 +125,9 @@ public class Team3699Robot extends SimpleRobot {
         log("Disabling RobotDrive Saftey... :D");
         robotdrive.setSafetyEnabled(false);
         
+        //autoChooser = new SendableChooser();
+        //autoChooser.addDefault("Default 3 Discs", this.auto_shoot);
+        //SmartDashboard.putData("Autonomous mode chooser",autoChooser);
    
         
     }
@@ -224,9 +227,15 @@ public class Team3699Robot extends SimpleRobot {
     public void autonomous(){
         log("Autonomus! (XD I am bad at spelling)");
         showUserMessages("Autonomous");
-        robotdrive.tankDrive(doRobotdriveScaling(-0.45),doRobotdriveScaling(-0.45));
-        Timer.delay(2.0);
-        robotdrive.tankDrive(doRobotdriveScaling(0.0),doRobotdriveScaling(0.0)); // Use to determine ft/s at this power.
+        //autoChooser.getSelected();
+        auto_shoot.update();
+        
+        
+//        robotdrive.setSafetyEnabled(false);
+//        robotdrive.tankDrive(doRobotdriveScaling(-0.45),doRobotdriveScaling(-0.45));
+//        Timer.delay(2.0);
+//        robotdrive.tankDrive(doRobotdriveScaling(0.0),doRobotdriveScaling(0.0)); // Use to determine ft/s at this power.
+
     }
     
     public double doRobotdriveScaling(double value){
