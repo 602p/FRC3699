@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.Timer;
  *
  * @author Louis
  */
-public class AutoPullDown {
-    boolean running = false;
+public class Shoot3Discs {
+    boolean shooting = false;
     private class TimerTaskStopPulldown implements Runnable{
         private final Team3699Robot robo;
         public TimerTaskStopPulldown(Team3699Robot robo){
@@ -24,21 +24,5 @@ public class AutoPullDown {
             this.robo.log("...2");
             this.robo.pullDownJaguar.set(0d);
         }
-        
-    }
-    public void pullDown(Team3699Robot robo){
-        if (!this.running){
-            this.running=true;
-            robo.pullDownJaguar.set(-0.3d);
-            
-            TimerTaskStopPulldown s = new TimerTaskStopPulldown(robo);
-            Thread t = new Thread(s);
-            
-            t.start();
-        }
-    }
-    
-    public void reset(){
-        this.running=false;
-    }
+}
 }

@@ -21,7 +21,7 @@ public final class Constants {
     public static int shooterToggleButton = 4;
     public static int shooterMultChannel=4;
     public static int shooterPWMChannel=9; //
-    public static int armMotorPWM=2;
+    public static int armMotorPWM=8;
     public static int OpticalSensorChannel=1; //
     public static int armToggleButton=5;
     public static int armBottom = 3; //

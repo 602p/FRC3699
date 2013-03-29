@@ -42,8 +42,8 @@ public class Team3699Robot extends SimpleRobot {
     public Jaguar shooterMotor = new Jaguar(Constants.shooterPWMChannel);
 >>>>>>> pULL dOWN sHOOTER dURING aUTONOMUS, wITH jUST a tIMED sCRIPT
     
-//    public ArmControl2 arm = new ArmControl2(this);
-//    public Jaguar armMotor = new Jaguar(Constants.armMotorPWM);
+    public ArmControl3 arm = new ArmControl3(this);
+    public Jaguar armMotor = new Jaguar(Constants.armMotorPWM);
     
     public IntegrationControl2 integ = new IntegrationControl2(this);
     
@@ -146,12 +146,13 @@ public class Team3699Robot extends SimpleRobot {
         this.elevator.resetState();
 //        try{
         showUserMessages("TeleOp");
+        this.arm.state=0;
         
         while (isOperatorControl()&&isEnabled()){
             robotdrive.setSafetyEnabled(true); //In case the program were to stop, this stops the motors from continuing to run.
             if (! Util.checkButton(this, Constants.robotdrive_break_button)){
-                robotdrive.tankDrive(doRobotdriveScaling(joystick_left.getY()), 
-                        doRobotdriveScaling(joystick_right.getY()));
+                robotdrive.tankDrive(-doRobotdriveScaling(joystick_left.getY()), 
+                        -doRobotdriveScaling(joystick_right.getY()));
                 //robotdrive.arcadeDrive(doRobotdriveScaling(joystick_left.getY())
                 //        , doRobotdriveScaling(joystick_left.getX()));
             }
@@ -174,8 +175,18 @@ public class Team3699Robot extends SimpleRobot {
             this.shooter.updateStates(this);
             this.shooterMotor.set(this.shooter.calculateShooterSpeed());
             
-//            this.arm.update();
-//            this.armMotor.set(this.arm.getArmSpeed());
+            if (this.driverstation.getDigitalIn(4)){
+            this.armMotor.set(this.driverstation.getAnalogIn(3));
+            }else{
+                this.armMotor.set(-this.driverstation.getAnalogIn(3));
+            }
+            
+            this.arm.update();
+            if (this.arm.getArmSpeed() != 0D){
+                this.armMotor.set(this.arm.getArmSpeed());
+            }
+            
+            
             
             if (this.integ.doElevatorUpdate()){
             this.elevator.update();
@@ -254,6 +265,7 @@ public class Team3699Robot extends SimpleRobot {
         this.pullDown.reset();
         while (this.isAutonomous()&&isEnabled()){
         this.pullDown.pullDown(this);
+        
         }
         //robotdrive.tankDrive(doRobotdriveScaling(-0.45),doRobotdriveScaling(-0.45));
         //Timer.delay(2.0);
