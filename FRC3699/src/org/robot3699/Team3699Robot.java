@@ -149,7 +149,7 @@ public class Team3699Robot extends SimpleRobot {
         this.arm.state=0;
         
         while (isOperatorControl()&&isEnabled()){
-            robotdrive.setSafetyEnabled(true); //In case the program were to stop, this stops the motors from continuing to run.
+            //robotdrive.setSafetyEnabled(true); //In case the program were to stop, this stops the motors from continuing to run.
             if (! Util.checkButton(this, Constants.robotdrive_break_button)){
                 robotdrive.tankDrive(-doRobotdriveScaling(joystick_left.getY()), 
                         -doRobotdriveScaling(joystick_right.getY()));
@@ -186,8 +186,6 @@ public class Team3699Robot extends SimpleRobot {
                 this.armMotor.set(this.arm.getArmSpeed());
             }
             
-            
-            
             if (this.integ.doElevatorUpdate()){
             this.elevator.update();
             this.Elevator_motor.set(this.elevator.getElevatorSpeed());
@@ -220,6 +218,7 @@ public class Team3699Robot extends SimpleRobot {
                 this.integ.state=0;
                 this.intake.state=0;
                 this.integ.elevator_out_roller.set(0d);
+                this.arm.state=0;
             }
             
             {

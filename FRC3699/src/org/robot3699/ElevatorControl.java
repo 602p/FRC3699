@@ -54,6 +54,7 @@ public class ElevatorControl {
             if (!this.intakeCounter.get()){
                 this.state=1;
                 this.numDiscs++;
+                this.robo.intake.state=0;
             }
         }else if (this.state==1){
             if (this.tickCounterToggle.get()){
