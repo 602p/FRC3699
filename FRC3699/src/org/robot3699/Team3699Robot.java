@@ -34,8 +34,13 @@ public class Team3699Robot extends SimpleRobot {
     public DriverStation driverstation = DriverStation.getInstance();
     public NetworkTable server;
     
+<<<<<<< HEAD
 //    public ShooterControl shooter = new ShooterControl();
       public Jaguar shooterMotor = new Jaguar(Constants.shooterPWMChannel);
+=======
+    public ShooterControl shooter = new ShooterControl();
+    public Jaguar shooterMotor = new Jaguar(Constants.shooterPWMChannel);
+>>>>>>> pULL dOWN sHOOTER dURING aUTONOMUS, wITH jUST a tIMED sCRIPT
     
 //    public ArmControl2 arm = new ArmControl2(this);
 //    public Jaguar armMotor = new Jaguar(Constants.armMotorPWM);
@@ -70,6 +75,8 @@ public class Team3699Robot extends SimpleRobot {
     int dev_=0;
     
     public boolean[] errors = new boolean[10];
+    
+    public AutoPullDown pullDown = new AutoPullDown();
     
     //^ Yeah, yeah. Way overinitizized
     //ERRNO 0: Init error
@@ -164,8 +171,8 @@ public class Team3699Robot extends SimpleRobot {
             
             updateSmartDashboard();
             
-//            this.shooter.updateStates(this);
-//            this.shooterMotor.set(this.shooter.calculateShooterSpeed());
+            this.shooter.updateStates(this);
+            this.shooterMotor.set(this.shooter.calculateShooterSpeed());
             
 //            this.arm.update();
 //            this.armMotor.set(this.arm.getArmSpeed());
@@ -181,6 +188,12 @@ public class Team3699Robot extends SimpleRobot {
             this.Elevator_intake_motor.set(0.6D);
             }else{
                 this.Elevator_intake_motor.set(0D);
+            }
+            
+            if (this.driverstation.getDigitalIn(3)){
+            this.pullDownJaguar.set(this.driverstation.getAnalogIn(2));
+            }else{
+                this.pullDownJaguar.set(-this.driverstation.getAnalogIn(2));
             }
             
             this.integ.update();
@@ -227,6 +240,7 @@ public class Team3699Robot extends SimpleRobot {
     public void autonomous(){
         log("Autonomus! (XD I am bad at spelling)");
         showUserMessages("Autonomous");
+<<<<<<< HEAD
         //autoChooser.getSelected();
         auto_shoot.update();
         
@@ -236,6 +250,15 @@ public class Team3699Robot extends SimpleRobot {
 //        Timer.delay(2.0);
 //        robotdrive.tankDrive(doRobotdriveScaling(0.0),doRobotdriveScaling(0.0)); // Use to determine ft/s at this power.
 
+=======
+        this.pullDown.reset();
+        while (this.isAutonomous()&&isEnabled()){
+        this.pullDown.pullDown(this);
+        }
+        //robotdrive.tankDrive(doRobotdriveScaling(-0.45),doRobotdriveScaling(-0.45));
+        //Timer.delay(2.0);
+        //robotdrive.tankDrive(doRobotdriveScaling(0.0),doRobotdriveScaling(0.0)); // Use to determine ft/s at this power.
+>>>>>>> pULL dOWN sHOOTER dURING aUTONOMUS, wITH jUST a tIMED sCRIPT
     }
     
     public double doRobotdriveScaling(double value){

@@ -15,7 +15,7 @@ public class IntegrationControl2 {
     public ToggleButton shooterToggle = new ToggleButton();
     public Jaguar elevator_out_roller = new Jaguar(Constants.elevator_outtake_PWM);
     double readyState=2.5d;
-    public double takeDownTo = 2.3d;
+    public double takeDownTo = 2d;
     int state = 0;
     //0=off
     //1=move elevator up
@@ -60,9 +60,7 @@ public class IntegrationControl2 {
            this.robo.Elevator_motor.setSafetyEnabled(false);
         }else if (this.state==3){
             
-            this.robo.Elevator_motor.set(-0.5d);
-            
-            this.robo.Elevator_motor.set(-0.5);
+            this.robo.Elevator_motor.set(-0.4);
             
             this.elevator_out_roller.set(0.8d);
             
