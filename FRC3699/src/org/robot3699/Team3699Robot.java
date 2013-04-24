@@ -151,12 +151,12 @@ public class Team3699Robot extends SimpleRobot {
         while (isOperatorControl()&&isEnabled()){
             //robotdrive.setSafetyEnabled(true); //In case the program were to stop, this stops the motors from continuing to run.
             if (! Util.checkButton(this, Constants.robotdrive_break_button)){
-                robotdrive.tankDrive(-doRobotdriveScaling(joystick_left.getY()), 
-                        -doRobotdriveScaling(joystick_right.getY()));
-                //robotdrive.arcadeDrive(doRobotdriveScaling(joystick_left.getY())
-                //        , doRobotdriveScaling(joystick_left.getX()));
+//                robotdrive.tankDrive(-doRobotdriveScaling(joystick_left.getY()), 
+//                        -doRobotdriveScaling(joystick_right.getY()));
+                robotdrive.arcadeDrive(doRobotdriveScaling(joystick_left.getY())
+                        , doRobotdriveScaling(joystick_left.getX()));
             }
-            
+            // x, y int := 0, 1;
 //            if (driverstation.getDigitalIn(3)){
 //                this.test_CIM_1.set(driverstation.getAnalogIn(2));
 //            }else{

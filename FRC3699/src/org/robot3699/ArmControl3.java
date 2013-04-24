@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
  */
 public class ArmControl3 {
     public Team3699Robot robo;
-    double speed = 0.95D;
+    double speed = 10D;
     public DigitalInput limit = new DigitalInput(Constants.armBottom);
     public int state=0;
     //0=ready

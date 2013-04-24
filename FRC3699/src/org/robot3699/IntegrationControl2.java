@@ -81,6 +81,7 @@ public class IntegrationControl2 {
             this.robo.Elevator_motor.setSafetyEnabled(true);
           //  this.elevator_out_roller.set(0d);
             this.robo.Elevator_motor.set(0d);
+            this.robo.elevator.state=1;
         }
         
         if (this.state!=0){

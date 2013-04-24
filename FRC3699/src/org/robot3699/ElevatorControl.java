@@ -61,6 +61,7 @@ public class ElevatorControl {
                 this.state=0;
             }
         }
+        
     }
     
     public void resetState(){
