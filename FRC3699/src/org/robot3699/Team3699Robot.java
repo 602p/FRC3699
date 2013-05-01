@@ -34,13 +34,13 @@ public class Team3699Robot extends SimpleRobot {
     public DriverStation driverstation = DriverStation.getInstance();
     public NetworkTable server;
     
-<<<<<<< HEAD
+/*<<<<<<< HEAD
 //    public ShooterControl shooter = new ShooterControl();
       public Jaguar shooterMotor = new Jaguar(Constants.shooterPWMChannel);
-=======
+=======*/
     public ShooterControl shooter = new ShooterControl();
     public Jaguar shooterMotor = new Jaguar(Constants.shooterPWMChannel);
->>>>>>> pULL dOWN sHOOTER dURING aUTONOMUS, wITH jUST a tIMED sCRIPT
+//>>>>>>> pULL dOWN sHOOTER dURING aUTONOMUS, wITH jUST a tIMED sCRIPT
     
     public ArmControl3 arm = new ArmControl3(this);
     public Jaguar armMotor = new Jaguar(Constants.armMotorPWM);
@@ -249,7 +249,7 @@ public class Team3699Robot extends SimpleRobot {
     
     public void autonomous(){
         log("Autonomus! (XD I am bad at spelling)");
-        showUserMessages("Autonomous");
+        showUserMessages("Autonomous");/*
 <<<<<<< HEAD
         //autoChooser.getSelected();
         auto_shoot.update();
@@ -270,7 +270,7 @@ public class Team3699Robot extends SimpleRobot {
         //Timer.delay(2.0);
         //robotdrive.tankDrive(doRobotdriveScaling(0.0),doRobotdriveScaling(0.0)); // Use to determine ft/s at this power.
 >>>>>>> pULL dOWN sHOOTER dURING aUTONOMUS, wITH jUST a tIMED sCRIPT
-    }
+*/    }
     
     public double doRobotdriveScaling(double value){
         if (driverstation.getDigitalIn(Constants.driverstation_scale_toggle_channel)){
