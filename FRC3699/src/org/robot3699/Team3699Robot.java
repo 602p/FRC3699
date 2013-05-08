@@ -68,7 +68,7 @@ public class Team3699Robot extends SimpleRobot {
     
     public ElevatorControl elevator = new ElevatorControl(this);
     public IntakeControl intake = new IntakeControl(this);
-    public Auto_Integration2 integ2 = new Auto_Integration2(this);
+   // public Auto_Integration2 integ2 = new Auto_Integration2(this);
     public Shoot3Auto auto_shoot = new Shoot3Auto(this);
     //SendableChooser autoChooser;
    

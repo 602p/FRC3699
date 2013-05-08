@@ -21,17 +21,17 @@ public class Shoot3Auto {
     public void update() {
         shoot = true;
         robo.shooterMotor.set(0.7);
-        robo.integ2.update(shoot);
+        //robo.integ2.update(shoot);
         Timer.delay(3);
         shoot = false;
         Timer.delay(1);
         shoot = true;
-        robo.integ2.update(shoot);
+        //robo.integ2.update(shoot);
         Timer.delay(3);
         shoot = false;
         Timer.delay(1);
         shoot = true;
-        robo.integ2.update(shoot);
+        //robo.integ2.update(shoot);
         Timer.delay(3);
         shoot = false;
         Timer.delay(1);
